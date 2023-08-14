@@ -4,7 +4,7 @@
 python ./app/backend_pre_start.py
 
 # Run migrations
-alembic upgrade head    <---- ALEMBIC MIGRATION COMMAND
+alembic upgrade head
 
 # Create initial data in DB
 python ./app/initial_data.py
