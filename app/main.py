@@ -47,6 +47,22 @@ def search_recipes(
     return {"results": list(results)[:max_results]}
 
 
+@api_router.post("/recipe/", status_code=201, response_model=Recipe)
+def create_recipe(*, recipe_in: RecipeCreate) -> dict:  # 2
+    """
+    Create a new recipe (in memory only)
+    """
+    new_entry_id = len(RECIPES) + 1
+    recipe_entry = Recipe(
+        id=new_entry_id,
+        label=recipe_in.label,
+        source=recipe_in.source,
+    )
+    RECIPES.append(recipe_entry.dict())  # 3
+
+    return recipe_entry
+
+
 app.include_router(api_router)
 
 
