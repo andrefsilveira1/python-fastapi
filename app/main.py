@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter, Query
 
 from typing import Optional
 
-from app.schemas import RecipeSearchResults, Recipe, RecipeCreate
+from app.schema import RecipeSearchResults, Recipe, RecipeCreate
 from app.recipes import RECIPES
 
 
