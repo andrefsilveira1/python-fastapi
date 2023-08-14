@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Query
+from fastapi import FastAPI, APIRouter, Query, HTTPException
 
 from typing import Optional
 
@@ -26,8 +26,11 @@ def fetch_recipe(*, recipe_id: int) -> dict:
     """
 
     result = [recipe for recipe in RECIPES if recipe["id"] == recipe_id]
-    if result:
-        return result[0]
+    if not result:
+        raise HTTPException(
+            status_code=404, detail=f"Recipe with ID {recipe_id} not found"
+        )
+    return result[0]
 
 
 # https://fastapi.tiangolo.com/tutorial/query-params/
@@ -45,6 +48,22 @@ def search_recipes(
         # Estudar mais sobre expressões lambda em python
     results = filter(lambda recipe: keyword.lower() in recipe["label"].lower(), RECIPES)
     return {"results": list(results)[:max_results]}
+
+
+@api_router.post("/recipe/", status_code=201, response_model=Recipe)
+def create_recipe(*, recipe_in: RecipeCreate) -> dict:  # 2
+    """
+    Create a new recipe (in memory only)
+    """
+    new_entry_id = len(RECIPES) + 1
+    recipe_entry = Recipe(
+        id=new_entry_id,
+        label=recipe_in.label,
+        source=recipe_in.source,
+    )
+    RECIPES.append(recipe_entry.dict())  # 3
+
+    return recipe_entry
 
 
 app.include_router(api_router)
