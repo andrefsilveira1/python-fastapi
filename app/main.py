@@ -1,25 +1,9 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Query
 
 from typing import Optional
 
-
-RECIPES = [
-    {
-        "id": 1,
-        "label": "Chicken Vesuvio",
-        "source": "Serious Eats",
-    },
-    {
-        "id": 2,
-        "label": "Chicken Paprikash",
-        "source": "No Recipes",
-    },
-    {
-        "id": 3,
-        "label": "Cauliflower and Tofu Curry Recipe",
-        "source": "Serious Eats",
-    },
-]
+from app.schema import RecipeSearchResults, Recipe, RecipeCreate
+from app.recipes import RECIPES
 
 
 app = FastAPI(title="Recipe API", openapi_url="/openapi.json")
